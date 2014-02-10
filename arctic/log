@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+
+printf '\033[35m%s\033[0m\n' "$*"

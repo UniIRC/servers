@@ -1,0 +1,56 @@
+#!/bin/sh
+
+set -e
+
+./log Installing APT configuration
+cp -r overlay/etc/apt /etc
+
+./log Updating package lists
+apt-get -qq update
+
+./log Upgrading packages
+apt-get -qq upgrade
+
+./package zsh
+./package mosh
+./package htop
+./package mutt
+./package tmux
+./package nginx
+./package screen
+./package cowsay
+./package figlet
+./package toilet
+./package fortune
+./package cmatrix
+./package debconf-utils
+./package exim4-daemon-light
+
+./log Copying overlay to root filesystem
+cp -r overlay/* /
+
+./log Restarting nginx
+/etc/init.d/nginx restart
+
+./log Stopping exim4
+/etc/init.d/exim4 stop
+
+./log Importing debconf configuration values
+for i in debconf/*; do
+	debconf-set-selections < "$i"
+done
+
+./log Starting exim4
+/etc/init.d/exim4 start
+
+./log Limit nproc to 100 for all users except root
+echo '* hard nproc 100' > /etc/security/limits.conf
+
+./log Setting root shell to /bin/false to discourage shell usage
+chsh -s /bin/false < /dev/null
+
+./log Disabling root password to prevent password-based login
+passwd -l root
+
+./log Deleting authorized_keys to prevent root SSH usage
+rm ~/.ssh/authorized_keys
