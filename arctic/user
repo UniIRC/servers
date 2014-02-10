@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+useradd -m "$1"
+mkdir "/home/$1/.ssh"
+if [ -f "ssh/$1.pub" ]; then
+	./log "Using bundled SSH public key for $1"
+	cp "ssh/$1.pub" "/home/$1/.ssh/authorized_keys"
+else
+	./log "Please enter the SSH public key for $1:"
+	tee "/home/$1/.ssh/authorized_keys"
+fi
+chmod 700 "/home/$1"
+usermod -a -G sudo "$1"

@@ -46,6 +46,9 @@ done
 ./log Limit nproc to 100 for all users except root
 echo '* hard nproc 100' > /etc/security/limits.conf
 
+./log Allowing members of sudo to sudo without password
+echo '%sudo ALL = NOPASSWD: ALL' > /etc/sudoers.d/sudogroup
+
 ./log Setting root shell to /bin/false to discourage shell usage
 chsh -s /bin/false < /dev/null
 
