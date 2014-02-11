@@ -61,5 +61,8 @@ echo '%sudo ALL = NOPASSWD: ALL' > /etc/sudoers.d/sudogroup
 ./lockdown admin
 
 for i in ssh/*; do
-	./user "`basename "$i"`"
+	./user "`basename "$i" .pub`"
 done
+
+./log Rebooting server, as setup is complete
+reboot
