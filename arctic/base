@@ -29,8 +29,16 @@ apt-get -qq upgrade
 ./log Copying overlay to root filesystem
 cp -r overlay/* /
 
-./log Restarting nginx
-/etc/init.d/nginx restart
+./log Stopping nginx
+/etc/init.d/nginx stop
+
+./log Fixing permissions for /var/www
+chown -R www-data:www-data /var/www
+chmod 6777 /var/www
+chmod -R 6775 /var/www/www.uniirc.com
+
+./log Starting nginx
+/etc/init.d/nginx start
 
 ./log Stopping exim4
 /etc/init.d/exim4 stop

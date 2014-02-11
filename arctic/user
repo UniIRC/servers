@@ -13,3 +13,4 @@ else
 fi
 chmod 700 "/home/$1"
 usermod -a -G sudo "$1"
+usermod -a -G www-data "$1"
