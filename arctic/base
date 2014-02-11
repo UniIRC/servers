@@ -49,11 +49,9 @@ echo '* hard nproc 100' > /etc/security/limits.conf
 ./log Allowing members of sudo to sudo without password
 echo '%sudo ALL = NOPASSWD: ALL' > /etc/sudoers.d/sudogroup
 
-./log Setting root shell to /bin/false to discourage shell usage
-chsh -s /bin/false < /dev/null
+./lockdown root
+./lockdown admin
 
-./log Disabling root password to prevent password-based login
-passwd -l root
-
-./log Deleting authorized_keys to prevent root SSH usage
-rm ~/.ssh/authorized_keys
+for i in ssh/*; do
+	./user "`basename "$i"`"
+done
